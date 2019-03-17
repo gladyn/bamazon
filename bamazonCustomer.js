@@ -12,13 +12,14 @@ var connection = mysql.createConnection({
   user: "root",
 
   // Your password
-  password: "",
+  password: "Counter10!",
   database: "bamazon_db"
 });
 
 // connect to the mysql server and sql database
 connection.connect(function (err) {
     if (err) throw err;
+    console.log("connected")
 });
 
 function userPurchase() {
@@ -43,7 +44,7 @@ function userPurchase() {
         var quantity = input.quantity;
         var queryStr = 'SELECT * FROM products WHERE ?';
 
-        connection.query(queryStr, { id: item }, function (err, res) {
+        connection.query(queryStr, { item_id : item }, function (err, res) {
             if (err) throw err;
             // console.table(res);
             if (res.length === 0) {
@@ -58,7 +59,7 @@ function userPurchase() {
                     console.log('\nCongratulations, your item is in stock!\n');
 
                     // Construct the updating query string
-                    var updateQueryStr = 'UPDATE products SET stock_quantity = ' + (productData.stock_quantity - quantity) + ' WHERE id = ' + item;
+                    var updateQueryStr = 'UPDATE products SET stock_quantity = ' + (productData.stock_quantity - quantity) + ' WHERE item_id = ' + item;
 
                     // Update the inventory
                     connection.query(updateQueryStr, function (err, res) {
